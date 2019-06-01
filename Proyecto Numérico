@@ -1,0 +1,97 @@
+import math
+import numpy as np
+from matplotlib import pyplot as plt
+from scipy.integrate import odeint
+#import random
+%matplotlib inline 
+
+a=1
+Phi_t=[1]
+t=[0]
+contador=1
+
+def V_1(m,P):
+    return -(m*m*P*P)/2
+ 
+def V_2(L,P):
+    return -(P*P)/2 - (P*P*P*L)/6
+
+
+
+try:
+    dt=float(input("Escoge la longitud de dt: "))
+    Rango=float(input("Escoge el rango entero de la grafica: "))
+    Divisiones=Rango/dt
+    A=float(input("Ingresa el valor de la primera derivada en el punto 0, \"e\": "))
+    elegir_funcion=int(input('Escribe \"1\" si deseas ejecutar el algoritmo para el potencial \"V=((mP)^2)/2\" o escribe \"2\" si prefieres el algoritmo para el potencial \"V=((mP)^2)/2 + (L(P)^3)/6\" con m=1  : '))
+except ValueError as err:
+    print(err)
+Delta_t=dt
+
+
+        
+if elegir_funcion==1:
+   
+   
+    
+    try:
+        m=float(input('Ingresa el valor de la masa, \"m\": '))
+    except ValueError as err:
+        print(err)
+    
+   
+    while contador<Divisiones:
+        if contador%2 != 0:
+            t.append(Delta_t)
+            b=dt*A+a
+            A+=dt*(V_1(m,a))
+            Phi_t.append(b)
+            Delta_t+=dt
+        
+        
+        elif contador%2 == 0:
+            t.append(Delta_t)
+            a=dt*A+b
+            A+=dt*(V_1(m,b)) 
+            Phi_t.append(a)
+            Delta_t+=dt
+     
+        contador+=1
+        
+
+        
+elif elegir_funcion==2:
+    
+    
+    try:
+        L=float(input('Ingresa el valor del parametro lambda, \"L\": '))
+    except ValueError as err:
+        print(err)
+        
+   
+    while contador<Divisiones:
+        if contador%2 != 0:
+            t.append(Delta_t)
+            b=dt*A+a
+            A+=dt*V_2(L,a) 
+            Phi_t.append(b)
+            Delta_t+=dt
+        
+        
+        elif contador%2 == 0:
+            t.append(Delta_t)
+            a=dt*A+b
+            A+=dt*V_2(L,b) 
+            Phi_t.append(a)
+            Delta_t+=dt
+     
+        contador+=1
+        
+
+else:
+    print("Se ingreso un dato incorrecto")
+    
+    
+    
+    
+plt.plot(t,Phi_t,"-r",label="f")
