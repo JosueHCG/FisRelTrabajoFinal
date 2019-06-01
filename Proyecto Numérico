@@ -8,39 +8,31 @@ from scipy.integrate import odeint
 a=1
 Phi_t=[1]
 t=[0]
-contador=1
+counter=1
 
 def V_1(m,P):
-    return -(m*m*P*P)/2
- 
-def V_2(L,P):
-    return -(P*P)/2 - (P*P*P*L)/6
-
-
+ return -(m*m*P*P)*0.5
+def V_2(s,P):
+ return -(P*P) - (P*P*P*s)/6
 
 try:
-    dt=float(input("Escoge la longitud de dt: "))
-    Rango=float(input("Escoge el rango entero de la grafica: "))
+    dt=float(input("Diferencial de dimension dt: "))
+    Rango=float(input("Parametro de la gráfica: "))
     Divisiones=Rango/dt
-    A=float(input("Ingresa el valor de la primera derivada en el punto 0, \"e\": "))
-    elegir_funcion=int(input('Escribe \"1\" si deseas ejecutar el algoritmo para el potencial \"V=((mP)^2)/2\" o escribe \"2\" si prefieres el algoritmo para el potencial \"V=((mP)^2)/2 + (L(P)^3)/6\" con m=1  : '))
+    A=float(input("Primer valor de la derivada en el punto 0, \"e\": "))
+    choosefunction=int(input(' \"1\" Para comenzar con potencial \"V=((mP)^2)/2\" , \"2\" si desea el algoritmo \"V=((mP)^2)*0.5 + (s(P)^3)/6\" con m=1  : '))
 except ValueError as err:
     print(err)
-Delta_t=dt
+deltat=dt
 
-
-        
-if elegir_funcion==1:
-   
-   
+  if choosefunction==1:
     
     try:
-        m=float(input('Ingresa el valor de la masa, \"m\": '))
+        m=float(input('Masa?, \"m\": '))
     except ValueError as err:
         print(err)
     
-   
-    while contador<Divisiones:
+    while counter<division:
         if contador%2 != 0:
             t.append(Delta_t)
             b=dt*A+a
@@ -48,50 +40,40 @@ if elegir_funcion==1:
             Phi_t.append(b)
             Delta_t+=dt
         
-        
-        elif contador%2 == 0:
+        elif counter%2 == 0:
             t.append(Delta_t)
             a=dt*A+b
             A+=dt*(V_1(m,b)) 
             Phi_t.append(a)
             Delta_t+=dt
      
-        contador+=1
-        
-
-        
-elif elegir_funcion==2:
-    
+       counter+=1
+                
+elif choosefunction==2:
     
     try:
-        L=float(input('Ingresa el valor del parametro lambda, \"L\": '))
+        s=float(input('Valor de lamba, \"s\": '))
     except ValueError as err:
         print(err)
-        
-   
-    while contador<Divisiones:
-        if contador%2 != 0:
+       
+    while counter<division:
+        if counter%2 != 0:
             t.append(Delta_t)
             b=dt*A+a
-            A+=dt*V_2(L,a) 
+            A+=dt*V_2(s,a) 
             Phi_t.append(b)
-            Delta_t+=dt
-        
-        
-        elif contador%2 == 0:
-            t.append(Delta_t)
+            deltat+=dt   
+        elif counter%2 == 0:
+            t.append(deltat)
             a=dt*A+b
-            A+=dt*V_2(L,b) 
+            A+=dt*V_2(s,b) 
             Phi_t.append(a)
-            Delta_t+=dt
-     
-        contador+=1
+            deltat+=dt
+   counter+=1
         
 
 else:
-    print("Se ingreso un dato incorrecto")
-    
-    
-    
+    print("Valor no aceptado")
+  #decline    
     
 plt.plot(t,Phi_t,"-r",label="f")
